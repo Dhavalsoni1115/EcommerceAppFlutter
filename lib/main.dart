@@ -1,6 +1,9 @@
-import 'dart:async';
-import 'package:ecommerce_app/screens/home_screen.dart';
-import 'package:ecommerce_app/screens/navigatescreen.dart';
+import 'package:animated_splash_screen/animated_splash_screen.dart';
+import 'package:ecommerce_app/features/home/home_screen.dart';
+import 'package:ecommerce_app/features/bottomnavigation/navigatescreen.dart';
+import 'package:ecommerce_app/features/login/login.dart';
+import 'package:ecommerce_app/features/product/product_screen.dart';
+import 'package:ecommerce_app/features/splashscreen/splash_screen.dart';
 import 'package:flutter/material.dart';
 
 void main() {
@@ -17,9 +20,15 @@ class MyApp extends StatefulWidget {
 class _MyAppState extends State<MyApp> {
   @override
   Widget build(BuildContext context) {
-    return const MaterialApp(
+    return MaterialApp(
       debugShowCheckedModeBanner: false,
-      home: NavigateScreen(),
+      home: LoginScreen(),
+      //     AnimatedSplashScreen(
+      //   splash: SplashScreen(),
+      //   nextScreen: NavigateScreen(),
+      //   duration: 1000,
+      //   splashTransition: SplashTransition.scaleTransition,
+      // ),
     );
   }
 }

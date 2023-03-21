@@ -1,8 +1,9 @@
-import 'package:ecommerce_app/Widgets/product_detail.dart';
-import 'package:ecommerce_app/model/product_model.dart';
+import 'package:ecommerce_app/features/product/product_screen.dart';
 import 'package:flutter/material.dart';
 
-import '../constants.dart';
+import '../../common/widgets/product_detail.dart';
+import '../../constants.dart';
+import '../appbar/customappbar.dart';
 
 class SelectSelectProductScreen extends StatelessWidget {
   final dynamic productData;
@@ -14,54 +15,73 @@ class SelectSelectProductScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        backgroundColor: appBarColor,
-        title: const Expanded(
-          child: TextField(
-            decoration: InputDecoration(
-                filled: true,
-                fillColor: Colors.white,
-                prefixIcon: Icon(Icons.search),
-                prefixIconColor: Colors.grey,
-                hintText: 'Search',
-                hintStyle: TextStyle(color: Colors.grey)),
+      appBar: const PreferredSize(
+        preferredSize: Size.fromHeight(60),
+        child: CustomAppBar(
+          appBarTitle: Expanded(
+            child: TextField(
+              decoration: InputDecoration(
+                  filled: true,
+                  fillColor: Colors.white,
+                  prefixIcon: Icon(Icons.search),
+                  prefixIconColor: Colors.grey,
+                  hintText: 'Search',
+                  hintStyle: TextStyle(color: Colors.grey)),
+            ),
           ),
+          appBarAction: [
+            Icon(
+              Icons.notifications,
+              size: 30,
+            ),
+            SizedBox(
+              width: 10,
+            ),
+            Icon(
+              Icons.mail,
+              size: 30,
+            ),
+            SizedBox(
+              width: 10,
+            ),
+            Icon(
+              Icons.favorite,
+              size: 30,
+            ),
+            SizedBox(
+              width: 5,
+            ),
+          ],
         ),
-        actions: const [
-          Icon(
-            Icons.notifications,
-            size: 30,
-          ),
-          SizedBox(
-            width: 10,
-          ),
-          Icon(
-            Icons.mail,
-            size: 30,
-          ),
-          SizedBox(
-            width: 10,
-          ),
-          Icon(
-            Icons.favorite,
-            size: 30,
-          ),
-          SizedBox(
-            width: 5,
-          ),
-        ],
       ),
       body: GridView.builder(
-          gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-            crossAxisCount: 2,
-          ),
-          itemCount: productData.length,
-          itemBuilder: (context, index) => ProductDetail(
+        gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+          crossAxisCount: 2,
+        ),
+        itemCount: productData.length,
+        itemBuilder: (context, index) => GestureDetector(
+          onTap: () {
+            print(productData[index]);
+            Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => ProductScreen(
+                    productImage: productData[index].productImage,
+                    productName: productData[index].productName,
+                    productDesc: productData[index].productDiscription,
+                    productPrice: productData[index].productPrice,
+                    productData: productData,
+                  ),
+                ));
+          },
+          child: ProductDetail(
               containerHeight: 125,
               containerWidth: double.infinity,
               productImage: productData[index].productImage,
               productName: productData[index].productName,
-              productLocation: productData[index].productLocation)),
+              productLocation: productData[index].productLocation),
+        ),
+      ),
     );
   }
 }

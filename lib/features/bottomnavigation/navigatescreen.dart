@@ -1,9 +1,9 @@
 import 'package:curved_navigation_bar/curved_navigation_bar.dart';
-import 'package:ecommerce_app/screens/home_Screen.dart';
-import 'package:ecommerce_app/screens/splash_screen.dart';
 import 'package:flutter/material.dart';
 
-import '../constants.dart';
+import '../../constants.dart';
+import '../home/home_screen.dart';
+import '../splashscreen/splash_screen.dart';
 
 class NavigateScreen extends StatefulWidget {
   const NavigateScreen({Key? key}) : super(key: key);
@@ -29,7 +29,7 @@ class _NavigateScreenState extends State<NavigateScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       bottomNavigationBar: CurvedNavigationBar(
-        backgroundColor: Colors.white,
+        backgroundColor: Colors.transparent,
         color: appBarColor,
         items: const [
           Icon(

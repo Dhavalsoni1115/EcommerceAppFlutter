@@ -1,4 +1,3 @@
-import 'package:ecommerce_app/Widgets/product_detail.dart';
 import 'package:flutter/material.dart';
 
 class ProductShow extends StatelessWidget {
@@ -50,13 +49,6 @@ class ProductShow extends StatelessWidget {
           ),
           Expanded(
             child: productChild,
-            //     ListView.builder(
-            //   shrinkWrap: true,
-            //   scrollDirection: Axis.horizontal,
-            //   itemCount: productList.length,
-            //   itemBuilder: (context, index) =>
-            //    ProductDetail(productImage: productList[], productName: productName, productLocation: productLocation),
-            // ),
           ),
         ],
       ),

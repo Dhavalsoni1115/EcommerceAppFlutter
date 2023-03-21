@@ -36,6 +36,8 @@ dependencies:
   cupertino_icons: ^1.0.2
   carousel_slider:
   curved_navigation_bar:
+  animated_splash_screen:
+  favorite_button:
  
 
 dev_dependencies:
