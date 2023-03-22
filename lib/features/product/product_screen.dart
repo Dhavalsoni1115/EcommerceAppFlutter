@@ -168,7 +168,7 @@ class _ProductScreenState extends State<ProductScreen> {
                   ),
                 ),
                 const SizedBox(
-                  height: 85,
+                  height: 70,
                 ),
               ],
             ),
@@ -215,7 +215,7 @@ class _ProductScreenState extends State<ProductScreen> {
                         color: appBarColor,
                       ),
                       Text(
-                        'Add to Bag',
+                        'Add to Cart',
                         style: TextStyle(
                           color: appBarColor,
                           fontWeight: FontWeight.bold,

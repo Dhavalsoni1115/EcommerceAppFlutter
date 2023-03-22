@@ -6,6 +6,8 @@ import 'package:ecommerce_app/features/product/product_screen.dart';
 import 'package:ecommerce_app/features/splashscreen/splash_screen.dart';
 import 'package:flutter/material.dart';
 
+import 'features/register/register.dart';
+
 void main() {
   runApp(const MyApp());
 }
@@ -22,13 +24,14 @@ class _MyAppState extends State<MyApp> {
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      home: LoginScreen(),
-      //     AnimatedSplashScreen(
-      //   splash: SplashScreen(),
-      //   nextScreen: NavigateScreen(),
-      //   duration: 1000,
-      //   splashTransition: SplashTransition.scaleTransition,
-      // ),
+      home:
+          //RegisterScreen(),
+          AnimatedSplashScreen(
+        splash: SplashScreen(),
+        nextScreen: NavigateScreen(),
+        duration: 1000,
+        splashTransition: SplashTransition.scaleTransition,
+      ),
     );
   }
 }
