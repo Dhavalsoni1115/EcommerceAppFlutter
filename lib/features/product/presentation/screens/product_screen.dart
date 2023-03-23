@@ -1,21 +1,31 @@
-import 'package:ecommerce_app/common/widgets/product_detail.dart';
-import 'package:ecommerce_app/common/widgets/productshow.dart';
+import 'dart:convert';
+
+import 'package:ecommerce_app/shared/widget/product_detail.dart';
+import 'package:ecommerce_app/shared/widget/productshow.dart';
+import 'package:ecommerce_app/features/home/data/model/product_model.dart';
 import 'package:flutter/material.dart';
 import 'package:favorite_button/favorite_button.dart';
 
-import '../../constants.dart';
-import '../appbar/customappbar.dart';
+import '../../../../constants.dart';
+import '../../../appbar/customappbar.dart';
 
 class ProductScreen extends StatefulWidget {
-  final dynamic productName, productImage, productDesc, productPrice;
+  final dynamic productId,
+      productName,
+      productImage,
+      productDesc,
+      productPrice,
+      productCategories;
   //   productName: productName,
-  final dynamic productData;
+  final List<Product> productData;
   const ProductScreen({
     Key? key,
+    required this.productId,
     required this.productName,
     required this.productImage,
     required this.productDesc,
     required this.productPrice,
+    required this.productCategories,
     required this.productData,
   }) : super(key: key);
 
@@ -28,7 +38,7 @@ class _ProductScreenState extends State<ProductScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: backgroundColor,
-      appBar: const PreferredSize(
+      appBar: PreferredSize(
         preferredSize: Size.fromHeight(60),
         child: CustomAppBar(
           appBarTitle: Expanded(
@@ -72,9 +82,9 @@ class _ProductScreenState extends State<ProductScreen> {
           SingleChildScrollView(
             child: Column(
               children: [
-                Container(
-                  height: 480,
-                  width: double.infinity,
+                Card(
+                  // height: 500,
+                  // width: double.infinity,
                   color: Colors.white,
                   child: Column(
                     children: [
@@ -86,7 +96,9 @@ class _ProductScreenState extends State<ProductScreen> {
                           color: Colors.grey,
                           borderRadius: BorderRadius.circular(20),
                           image: DecorationImage(
-                            image: NetworkImage(widget.productImage.toString()),
+                            image: MemoryImage(
+                                base64Decode(widget.productImage.toString())),
+                            //NetworkImage(widget.productImage.toString()),
                             fit: BoxFit.fill,
                           ),
                         ),
@@ -150,23 +162,43 @@ class _ProductScreenState extends State<ProductScreen> {
                   ),
                 ),
                 ProductShow(
-                  title: 'Similiar product',
+                  title: 'Similar Products',
                   textButton: false,
-                  onTap: () {},
                   productChild: ListView.builder(
                     shrinkWrap: true,
                     scrollDirection: Axis.horizontal,
                     itemCount: widget.productData.length,
                     itemBuilder: (context, index) => ProductDetail(
-                      productImage: widget.productData[index].productImage,
-                      productName: widget.productData[index].productName,
-                      productLocation:
-                          widget.productData[index].productLocation,
                       containerHeight: 150,
                       containerWidth: 100,
+                      image: MemoryImage(base64Decode(
+                          widget.productData[index].productImage.toString())),
+                      productName:
+                          widget.productData[index].productName.toString(),
+                      productLocation:
+                          widget.productData[index].productLocation.toString(),
                     ),
                   ),
+                  onTap: () {},
                 ),
+                // ProductShow(
+                //   title: 'Similiar product',
+                //   textButton: false,
+                //   onTap: () {},
+                //   productChild: ListView.builder(
+                //     shrinkWrap: true,
+                //     scrollDirection: Axis.horizontal,
+                //     itemCount: widget.productData.length,
+                //     itemBuilder: (context, index) => ProductDetail(
+                //       productImage: widget.productData[index].productImage,
+                //       productName: widget.productData[index].productName,
+                //       productLocation:
+                //           widget.productData[index].productLocation,
+                //       containerHeight: 150,
+                //       containerWidth: 100,
+                //     ),
+                //   ),
+                // ),
                 const SizedBox(
                   height: 70,
                 ),

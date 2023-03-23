@@ -1,16 +1,17 @@
 import 'package:flutter/material.dart';
 
 class ProductDetail extends StatelessWidget {
-  final String productImage, productName, productLocation;
+  final String productName, productLocation;
   final double containerHeight, containerWidth;
+  final ImageProvider image;
 
   const ProductDetail({
     Key? key,
-    required this.productImage,
     required this.productName,
     required this.productLocation,
     required this.containerHeight,
     required this.containerWidth,
+    required this.image,
   }) : super(key: key);
 
   @override
@@ -26,9 +27,9 @@ class ProductDetail extends StatelessWidget {
             color: Colors.grey,
             borderRadius: BorderRadius.circular(15),
             image: DecorationImage(
-              image: NetworkImage(
-                productImage,
-              ),
+              image: image,
+              //     productImage,
+              //   ),
               fit: BoxFit.fill,
             ),
           ),
@@ -37,14 +38,14 @@ class ProductDetail extends StatelessWidget {
           padding: const EdgeInsets.only(left: 15, top: 5),
           child: Text(
             productName,
-            style: const TextStyle(fontSize: 15),
+            style: const TextStyle(fontSize: 12),
           ),
         ),
         Padding(
           padding: const EdgeInsets.only(left: 15, top: 2),
           child: Text(
             productLocation,
-            style: TextStyle(fontSize: 12, color: Colors.grey.shade700),
+            style: TextStyle(fontSize: 10, color: Colors.grey.shade700),
           ),
         ),
       ],

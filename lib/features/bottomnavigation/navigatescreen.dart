@@ -1,8 +1,10 @@
 import 'package:curved_navigation_bar/curved_navigation_bar.dart';
+import 'package:ecommerce_app/features/home/presentation/screens/home_screen.dart';
 import 'package:flutter/material.dart';
 
 import '../../constants.dart';
-import '../home/home_screen.dart';
+import '../home/data/data_source/get_product_data.dart';
+import '../home/data/model/product_model.dart';
 import '../splashscreen/splash_screen.dart';
 
 class NavigateScreen extends StatefulWidget {
