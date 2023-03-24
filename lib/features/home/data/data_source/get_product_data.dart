@@ -9,7 +9,7 @@ dynamic getProduts() async {
     Uri.parse(url),
   );
   if (response.statusCode == 200) {
-     print(response.body);
+    //print(response.body);
     // final List parsedList = json.decode(response.body);
     List<dynamic> parsed = jsonDecode(response.body);
     // print(parsed);
@@ -28,14 +28,21 @@ dynamic getProduts() async {
   }
 }
 
-// void _getImageBase64() async {
-//   final String url = 'http://192.168.1.5:3000/product';
-//   http.Response response = await http.get(Uri.parse(url));
-//   List<dynamic> parsed = jsonDecode(response.body);
-//     // print(parsed);
-//     // List<dynamic> respon = jsonDecode(response.body);
-//     List<Product> imageList =
-//         parsed.map((i) => Product.fromJson(i as Map<String, dynamic>)).toList();
-//   var _base64 = base64Encode();
-//   print(_base64);
-// }
+dynamic getSelectedProdut({required String productId}) async {
+  final String url = 'http://192.168.1.7:3000/product/$productId';
+  final response = await http.get(
+    Uri.parse(url),
+  );
+  if (response.statusCode == 200) {
+    //print(response.body);
+
+    var data = jsonDecode(response.body);
+    print('0000000000');
+    print(data);
+    Product dataList = Product.fromJson(data);
+
+    return dataList;
+  } else {
+    throw Exception('Failed to load products');
+  }
+}

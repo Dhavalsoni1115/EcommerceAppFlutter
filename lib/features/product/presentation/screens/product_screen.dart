@@ -7,26 +7,14 @@ import 'package:flutter/material.dart';
 import 'package:favorite_button/favorite_button.dart';
 
 import '../../../../constants.dart';
+import '../../../../shared/get_products.dart';
 import '../../../appbar/customappbar.dart';
 
 class ProductScreen extends StatefulWidget {
-  final dynamic productId,
-      productName,
-      productImage,
-      productDesc,
-      productPrice,
-      productCategories;
-  //   productName: productName,
-  final List<Product> productData;
+  final String selectProductId;
   const ProductScreen({
     Key? key,
-    required this.productId,
-    required this.productName,
-    required this.productImage,
-    required this.productDesc,
-    required this.productPrice,
-    required this.productCategories,
-    required this.productData,
+    required this.selectProductId,
   }) : super(key: key);
 
   @override
@@ -34,8 +22,41 @@ class ProductScreen extends StatefulWidget {
 }
 
 class _ProductScreenState extends State<ProductScreen> {
+  final getProductCubit = GetProductCubit();
+  Product? productData;
+  List<Product> allproductData = [];
+
+  getAllProductData() async {
+    List<Product> allproductData1 = await getProductCubit.getProductCubit();
+    setState(() {
+      allproductData = allproductData1;
+    });
+  }
+
+  getData() async {
+    dynamic productData1 = await getProductCubit.getSelectedProductCubit(
+        productId: widget.selectProductId.toString());
+    setState(() {
+      productData = productData1;
+    });
+    print(productData!);
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    print(widget.selectProductId.toString());
+    getData();
+    getAllProductData();
+  }
+
   @override
   Widget build(BuildContext context) {
+    setState(() {
+      print('/././././././././././.');
+      print(productData);
+      print('/././././././././././.');
+    });
     return Scaffold(
       backgroundColor: backgroundColor,
       appBar: PreferredSize(
@@ -82,126 +103,38 @@ class _ProductScreenState extends State<ProductScreen> {
           SingleChildScrollView(
             child: Column(
               children: [
-                Card(
-                  // height: 500,
-                  // width: double.infinity,
-                  color: Colors.white,
-                  child: Column(
-                    children: [
-                      Container(
-                        height: 200,
-                        width: double.infinity,
-                        margin: EdgeInsets.all(10),
-                        decoration: BoxDecoration(
-                          color: Colors.grey,
-                          borderRadius: BorderRadius.circular(20),
-                          image: DecorationImage(
-                            image: MemoryImage(
-                                base64Decode(widget.productImage.toString())),
-                            //NetworkImage(widget.productImage.toString()),
-                            fit: BoxFit.fill,
-                          ),
+                productData == null
+                    ? getProductCubit.showProductDetilCard(
+                        image: const AssetImage('assets/images/T973DText.png'),
+                        name: 'null',
+                        price: 'null',
+                        desc: 'null',
+                        child: Text('No Data'),
+                      )
+                    : getProductCubit.showProductDetilCard(
+                        image: MemoryImage(
+                          base64Decode(productData!.productImage.toString()),
+                        ),
+                        name: productData!.productName.toString(),
+                        price: productData!.productPrice.toString(),
+                        desc: productData!.productDiscription.toString(),
+                        child: ListView.builder(
+                          scrollDirection: Axis.horizontal,
+                          itemCount: allproductData.length,
+                          itemBuilder: (context, index) => ProductDetail(
+                              productName:
+                                  allproductData[index].productName.toString(),
+                              productLocation: allproductData[index]
+                                  .productLocation
+                                  .toString(),
+                              containerHeight: 150,
+                              containerWidth: 100,
+                              image: MemoryImage(base64Decode(
+                                  allproductData[index]
+                                      .productImage
+                                      .toString()))),
                         ),
                       ),
-                      Text(
-                        widget.productName.toString(),
-                        style: TextStyle(
-                          fontSize: 20,
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.all(10),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Text(
-                              'Rs ${widget.productPrice}',
-                              style: TextStyle(
-                                fontSize: 20,
-                              ),
-                            ),
-                            FavoriteButton(
-                              isFavorite: false,
-                              iconColor: appBarColor,
-                              //iconSize: 30,
-
-                              // iconDisabledColor: Colors.white,
-                              valueChanged: (_isFavorite) {
-                                print(_isFavorite);
-                              },
-                            ),
-                          ],
-                        ),
-                      ),
-                      Card(
-                        margin: const EdgeInsets.all(10),
-                        elevation: 0,
-                        color: Colors.white,
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            const Text(
-                              'Discription',
-                              style: TextStyle(fontSize: 20),
-                            ),
-                            Divider(
-                              color: Colors.black38,
-                            ),
-                            Text(
-                              widget.productDesc.toString(),
-                              // 'bhjkxfhjkvxbhjfvbhjxcbhjvbhxcvbhxbncvbhjxcvhbjbdvshdcvbshdbhbhDBchjkdvcghjSDCGHSDCVCHDHCBSH,DCBH,JDBCBH,DCH,ZDCHDCHJSADHCASHJDCVBSDHBVCHBVCXDBVCXHJBVDBBJXHDCVBXJHVBDCXBHJDVCBXHJ',
-                              textAlign: TextAlign.justify,
-                              style: TextStyle(
-                                  fontSize: 13, color: Colors.grey.shade500),
-                            ),
-                          ],
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-                ProductShow(
-                  title: 'Similar Products',
-                  textButton: false,
-                  productChild: ListView.builder(
-                    shrinkWrap: true,
-                    scrollDirection: Axis.horizontal,
-                    itemCount: widget.productData.length,
-                    itemBuilder: (context, index) => ProductDetail(
-                      containerHeight: 150,
-                      containerWidth: 100,
-                      image: MemoryImage(base64Decode(
-                          widget.productData[index].productImage.toString())),
-                      productName:
-                          widget.productData[index].productName.toString(),
-                      productLocation:
-                          widget.productData[index].productLocation.toString(),
-                    ),
-                  ),
-                  onTap: () {},
-                ),
-                // ProductShow(
-                //   title: 'Similiar product',
-                //   textButton: false,
-                //   onTap: () {},
-                //   productChild: ListView.builder(
-                //     shrinkWrap: true,
-                //     scrollDirection: Axis.horizontal,
-                //     itemCount: widget.productData.length,
-                //     itemBuilder: (context, index) => ProductDetail(
-                //       productImage: widget.productData[index].productImage,
-                //       productName: widget.productData[index].productName,
-                //       productLocation:
-                //           widget.productData[index].productLocation,
-                //       containerHeight: 150,
-                //       containerWidth: 100,
-                //     ),
-                //   ),
-                // ),
-                const SizedBox(
-                  height: 70,
-                ),
               ],
             ),
           ),
@@ -255,7 +188,7 @@ class _ProductScreenState extends State<ProductScreen> {
                       ),
                     ],
                   ),
-                ),
+                )
               ],
             ),
           )
@@ -264,3 +197,93 @@ class _ProductScreenState extends State<ProductScreen> {
     );
   }
 }
+// Stack(
+//         children: [
+//           SingleChildScrollView(
+//             child: Column(
+//               children: [
+//                 productData == null
+//                     ? getProductCubit.showProductDetilCard(
+//                         image: const AssetImage('assets/images/T973DText.png'),
+//                         name: 'null',
+//                         price: 'null',
+//                         desc: 'null',
+//                         child: Text('No Data'),
+//                       )
+//                     : getProductCubit.showProductDetilCard(
+//                         image: MemoryImage(
+//                           base64Decode(productData!.productImage.toString()),
+//                         ),
+//                         name: productData!.productName.toString(),
+//                         price: productData!.productPrice.toString(),
+//                         desc: productData!.productDiscription.toString(),
+//                         child: ListView.builder(
+//                           scrollDirection: Axis.horizontal,
+//                           itemCount: allproductData.length,
+//                           itemBuilder: (context, index) => ProductDetail(
+//                               productName:
+//                                   allproductData[index].productName.toString(),
+//                               productLocation: allproductData[index]
+//                                   .productLocation
+//                                   .toString(),
+//                               containerHeight: 150,
+//                               containerWidth: 100,
+//                               image: MemoryImage(base64Decode(
+//                                   allproductData[index]
+//                                       .productImage
+//                                       .toString()))),
+//                         ),
+//                       ),
+//               ],
+//             ),
+//           ),
+//         ],
+//       ),
+ // Container(
+                      //   height: 70,
+                      //   width: double.infinity,
+                      //   margin: const EdgeInsets.only(top: 610),
+                      //   color: appBarColor,
+                      //   child: Row(
+                      //     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                      //     children: [
+                      //       const Icon(
+                      //         Icons.chat,
+                      //         size: 30,
+                      //         color: Colors.white,
+                      //       ),
+                      //       MaterialButton(
+                      //         color: Colors.white,
+                      //         onPressed: () {},
+                      //         elevation: 2,
+                      //         shape: RoundedRectangleBorder(
+                      //           borderRadius: BorderRadius.circular(10),
+                      //         ),
+                      //         child: Text(
+                      //           'Checkout',
+                      //           style: TextStyle(
+                      //             color: appBarColor,
+                      //             fontWeight: FontWeight.bold,
+                      //           ),
+                      //         ),
+                      //       ),
+                      //       MaterialButton(
+                      //         color: Colors.white,
+                      //         onPressed: () {},
+                      //         elevation: 2,
+                      //         shape: RoundedRectangleBorder(
+                      //           borderRadius: BorderRadius.circular(10),
+                      //         ),
+                      //         child: Row(
+                      //           children: const [
+                      //             Icon(
+                      //               Icons.add,
+                      //               color: appBarColor,
+                      //             ),
+                      //             Text(
+                      //               'Add to Cart',
+                      //               style: TextStyle(
+                      //                 color: appBarColor,
+                      //                 fontWeight: FontWeight.bold,
+                      //               ),
+                      //             ),

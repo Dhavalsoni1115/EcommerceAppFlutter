@@ -41,12 +41,13 @@ class _HomeScreenState extends State<HomeScreen> {
           appBarTitle: Expanded(
             child: TextField(
               decoration: InputDecoration(
-                  filled: true,
-                  fillColor: Colors.white,
-                  prefixIcon: Icon(Icons.search),
-                  prefixIconColor: Colors.grey,
-                  hintText: 'Search',
-                  hintStyle: TextStyle(color: Colors.grey)),
+                filled: true,
+                fillColor: Colors.white,
+                prefixIcon: Icon(Icons.search),
+                prefixIconColor: Colors.grey,
+                hintText: 'Search',
+                hintStyle: TextStyle(color: Colors.grey),
+              ),
             ),
           ),
           appBarAction: [
