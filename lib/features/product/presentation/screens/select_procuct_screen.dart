@@ -24,9 +24,9 @@ class _SelectSelectProductScreenState extends State<SelectSelectProductScreen> {
   List<Product> productData = [];
 
   getData() async {
-    List<Product> productData1 = await getProductCubit.getProductCubit();
+    List<Product> productData = await getProductCubit.getProductCubit();
     setState(() {
-      productData = productData1;
+      productData = productData;
     });
   }
 
@@ -39,7 +39,7 @@ class _SelectSelectProductScreenState extends State<SelectSelectProductScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: PreferredSize(
+      appBar: const PreferredSize(
         preferredSize: Size.fromHeight(60),
         child: CustomAppBar(
           appBarTitle: Text('All Products'),
@@ -69,7 +69,6 @@ class _SelectSelectProductScreenState extends State<SelectSelectProductScreen> {
         ),
       ),
       body: getProductCubit.seclectProduct(context),
-
     );
   }
 }

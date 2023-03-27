@@ -17,29 +17,28 @@ class _HomeScreenState extends State<HomeScreen> {
   List<Product> productData = [];
 
   getData() async {
-    List<Product> productData1 = await getProductCubit.getProductCubit();
+    List<Product> productData = await getProductCubit.getProductCubit();
     setState(() {
-      productData = productData1;
+      productData = productData;
     });
   }
 
   @override
   void initState() {
     super.initState();
-
     getData();
-    // getProduts();
+    //getProduts();
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: backgroundColor,
-      appBar: const PreferredSize(
-        preferredSize: Size.fromHeight(60),
+      appBar: PreferredSize(
+        preferredSize: const Size.fromHeight(60),
         child: CustomAppBar(
           appBarTitle: Expanded(
-            child: TextField(
+            child: const TextField(
               decoration: InputDecoration(
                 filled: true,
                 fillColor: Colors.white,
@@ -50,7 +49,7 @@ class _HomeScreenState extends State<HomeScreen> {
               ),
             ),
           ),
-          appBarAction: [
+          appBarAction: const [
             Icon(
               Icons.notifications,
               size: 30,

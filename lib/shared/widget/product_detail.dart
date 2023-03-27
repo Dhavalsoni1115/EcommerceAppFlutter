@@ -28,8 +28,6 @@ class ProductDetail extends StatelessWidget {
             borderRadius: BorderRadius.circular(15),
             image: DecorationImage(
               image: image,
-              //     productImage,
-              //   ),
               fit: BoxFit.fill,
             ),
           ),

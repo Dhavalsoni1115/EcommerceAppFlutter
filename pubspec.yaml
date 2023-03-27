@@ -38,8 +38,9 @@ dependencies:
   curved_navigation_bar:
   animated_splash_screen:
   favorite_button:
-  http:  
-  image_picker: 
+  http: ^0.13.1
+  image_picker:
+  shared_preferences: 
 
 dev_dependencies:
   flutter_test:

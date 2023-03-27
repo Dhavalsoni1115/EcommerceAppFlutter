@@ -52,11 +52,6 @@ class _ProductScreenState extends State<ProductScreen> {
 
   @override
   Widget build(BuildContext context) {
-    setState(() {
-      print('/././././././././././.');
-      print(productData);
-      print('/././././././././././.');
-    });
     return Scaffold(
       backgroundColor: backgroundColor,
       appBar: PreferredSize(
@@ -81,9 +76,19 @@ class _ProductScreenState extends State<ProductScreen> {
             SizedBox(
               width: 10,
             ),
-            Icon(
-              Icons.shopping_cart,
-              size: 30,
+            Stack(
+              children: [
+                Center(
+                  child: Icon(
+                    Icons.shopping_cart,
+                    size: 40,
+                  ),
+                ),
+                CircleAvatar(
+                  radius: 12,
+                  child: Text('1'),
+                ),
+              ],
             ),
             SizedBox(
               width: 5,
@@ -121,75 +126,101 @@ class _ProductScreenState extends State<ProductScreen> {
                         child: ListView.builder(
                           scrollDirection: Axis.horizontal,
                           itemCount: allproductData.length,
-                          itemBuilder: (context, index) => ProductDetail(
-                              productName:
-                                  allproductData[index].productName.toString(),
-                              productLocation: allproductData[index]
-                                  .productLocation
-                                  .toString(),
-                              containerHeight: 150,
-                              containerWidth: 100,
-                              image: MemoryImage(base64Decode(
-                                  allproductData[index]
-                                      .productImage
-                                      .toString()))),
+                          itemBuilder: (context, index) =>
+                              allproductData[index].categories ==
+                                      productData!.categories
+                                  ? ProductDetail(
+                                      productName: allproductData[index]
+                                          .productName
+                                          .toString(),
+                                      productLocation: allproductData[index]
+                                          .productLocation
+                                          .toString(),
+                                      containerHeight: 150,
+                                      containerWidth: 100,
+                                      image: MemoryImage(
+                                        base64Decode(
+                                          allproductData[index]
+                                              .productImage
+                                              .toString(),
+                                        ),
+                                      ),
+                                    )
+                                  : SizedBox(),
                         ),
                       ),
               ],
             ),
           ),
-          Container(
-            height: 70,
-            width: double.infinity,
-            margin: const EdgeInsets.only(top: 610),
-            color: appBarColor,
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              children: [
-                const Icon(
-                  Icons.chat,
-                  size: 30,
-                  color: Colors.white,
-                ),
-                MaterialButton(
-                  color: Colors.white,
-                  onPressed: () {},
-                  elevation: 2,
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(10),
+          Align(
+            alignment: Alignment.bottomCenter,
+            child: Container(
+              height: 70,
+              width: double.infinity,
+              margin: const EdgeInsets.only(top: 610),
+              color: appBarColor,
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: [
+                  const Icon(
+                    Icons.chat,
+                    size: 30,
+                    color: Colors.white,
                   ),
-                  child: Text(
-                    'Checkout',
-                    style: TextStyle(
-                      color: appBarColor,
-                      fontWeight: FontWeight.bold,
+                  MaterialButton(
+                    color: Colors.white,
+                    onPressed: () {},
+                    elevation: 2,
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(10),
+                    ),
+                    child: Text(
+                      'Checkout',
+                      style: TextStyle(
+                        color: appBarColor,
+                        fontWeight: FontWeight.bold,
+                      ),
                     ),
                   ),
-                ),
-                MaterialButton(
-                  color: Colors.white,
-                  onPressed: () {},
-                  elevation: 2,
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(10),
-                  ),
-                  child: Row(
-                    children: const [
-                      Icon(
-                        Icons.add,
-                        color: appBarColor,
-                      ),
-                      Text(
-                        'Add to Cart',
-                        style: TextStyle(
+                  MaterialButton(
+                    color: Colors.white,
+                    onPressed: () {
+                      List cartData = [];
+                      cartData.add(
+                        [
+                          productData!.productId,
+                          productData!.productImage,
+                          productData!.productName,
+                          productData!.productPrice,
+                          productData!.productDiscription,
+                          productData!.productLocation,
+                          productData!.productCreatedAt,
+                        ],
+                      );
+                      print(cartData);
+                    },
+                    elevation: 2,
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(10),
+                    ),
+                    child: Row(
+                      children: const [
+                        Icon(
+                          Icons.add,
                           color: appBarColor,
-                          fontWeight: FontWeight.bold,
                         ),
-                      ),
-                    ],
-                  ),
-                )
-              ],
+                        Text(
+                          'Add to Cart',
+                          style: TextStyle(
+                            color: appBarColor,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                      ],
+                    ),
+                  )
+                ],
+              ),
             ),
           )
         ],
@@ -197,93 +228,3 @@ class _ProductScreenState extends State<ProductScreen> {
     );
   }
 }
-// Stack(
-//         children: [
-//           SingleChildScrollView(
-//             child: Column(
-//               children: [
-//                 productData == null
-//                     ? getProductCubit.showProductDetilCard(
-//                         image: const AssetImage('assets/images/T973DText.png'),
-//                         name: 'null',
-//                         price: 'null',
-//                         desc: 'null',
-//                         child: Text('No Data'),
-//                       )
-//                     : getProductCubit.showProductDetilCard(
-//                         image: MemoryImage(
-//                           base64Decode(productData!.productImage.toString()),
-//                         ),
-//                         name: productData!.productName.toString(),
-//                         price: productData!.productPrice.toString(),
-//                         desc: productData!.productDiscription.toString(),
-//                         child: ListView.builder(
-//                           scrollDirection: Axis.horizontal,
-//                           itemCount: allproductData.length,
-//                           itemBuilder: (context, index) => ProductDetail(
-//                               productName:
-//                                   allproductData[index].productName.toString(),
-//                               productLocation: allproductData[index]
-//                                   .productLocation
-//                                   .toString(),
-//                               containerHeight: 150,
-//                               containerWidth: 100,
-//                               image: MemoryImage(base64Decode(
-//                                   allproductData[index]
-//                                       .productImage
-//                                       .toString()))),
-//                         ),
-//                       ),
-//               ],
-//             ),
-//           ),
-//         ],
-//       ),
- // Container(
-                      //   height: 70,
-                      //   width: double.infinity,
-                      //   margin: const EdgeInsets.only(top: 610),
-                      //   color: appBarColor,
-                      //   child: Row(
-                      //     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                      //     children: [
-                      //       const Icon(
-                      //         Icons.chat,
-                      //         size: 30,
-                      //         color: Colors.white,
-                      //       ),
-                      //       MaterialButton(
-                      //         color: Colors.white,
-                      //         onPressed: () {},
-                      //         elevation: 2,
-                      //         shape: RoundedRectangleBorder(
-                      //           borderRadius: BorderRadius.circular(10),
-                      //         ),
-                      //         child: Text(
-                      //           'Checkout',
-                      //           style: TextStyle(
-                      //             color: appBarColor,
-                      //             fontWeight: FontWeight.bold,
-                      //           ),
-                      //         ),
-                      //       ),
-                      //       MaterialButton(
-                      //         color: Colors.white,
-                      //         onPressed: () {},
-                      //         elevation: 2,
-                      //         shape: RoundedRectangleBorder(
-                      //           borderRadius: BorderRadius.circular(10),
-                      //         ),
-                      //         child: Row(
-                      //           children: const [
-                      //             Icon(
-                      //               Icons.add,
-                      //               color: appBarColor,
-                      //             ),
-                      //             Text(
-                      //               'Add to Cart',
-                      //               style: TextStyle(
-                      //                 color: appBarColor,
-                      //                 fontWeight: FontWeight.bold,
-                      //               ),
-                      //             ),

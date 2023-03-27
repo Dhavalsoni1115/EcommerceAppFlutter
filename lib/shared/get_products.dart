@@ -11,13 +11,13 @@ import 'widget/product_detail.dart';
 import 'widget/productshow.dart';
 import '../features/home/presentation/widget/carousalslider_show.dart';
 import '../features/product/presentation/screens/select_procuct_screen.dart';
+import 'dart:io';
 
 class GetProductCubit {
   List<Product> productData = [];
   Product? selectdProductData;
   getProductCubit() async {
     productData = await getProduts();
-    print('======');
     print(productData);
     return productData;
   }
@@ -123,12 +123,6 @@ class GetProductCubit {
       itemBuilder: (context, index) => GestureDetector(
         onTap: () {
           selectProductId = productData[index].productId.toString();
-          // selectProductName = productData[index].productName.toString();
-          // selectProductImage = productData[index].productImage.toString();
-          // selectProductPrice = productData[index].productPrice.toString();
-          // selectProductDesc = productData[index].productDiscription.toString();
-          // print('========Id========');
-          // print(selectProductId.toString());
           Navigator.push(
             context,
             MaterialPageRoute(
@@ -196,9 +190,6 @@ class GetProductCubit {
                 FavoriteButton(
                   isFavorite: false,
                   iconColor: appBarColor,
-                  //iconSize: 30,
-
-                  // iconDisabledColor: Colors.white,
                   valueChanged: (_isFavorite) {
                     print(_isFavorite);
                   },
