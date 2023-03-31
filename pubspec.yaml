@@ -40,7 +40,8 @@ dependencies:
   favorite_button:
   http: ^0.13.1
   image_picker:
-  shared_preferences: 
+  shared_preferences:
+  flutter_animated_dialog: 
 
 dev_dependencies:
   flutter_test:

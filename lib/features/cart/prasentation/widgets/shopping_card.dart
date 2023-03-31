@@ -3,7 +3,8 @@ import 'package:flutter/material.dart';
 import '../../../../constants.dart';
 
 class ShoppingCard extends StatelessWidget {
-  final String productImage, productName, productPrice;
+  final String productName, productPrice;
+  final ImageProvider productImage;
   final VoidCallback addOnTap, removeOnTap;
   final int productCount;
   const ShoppingCard({
@@ -34,9 +35,7 @@ class ShoppingCard extends StatelessWidget {
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(10),
                 image: DecorationImage(
-                  image: NetworkImage(
-                    productImage,
-                  ),
+                  image: productImage,
                   fit: BoxFit.fill,
                 ),
               ),

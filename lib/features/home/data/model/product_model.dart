@@ -1,8 +1,8 @@
 import 'dart:convert';
 
 class Product {
-  int? productId;
-  String? productImage,
+  String? productId,
+      productImage,
       productName,
       productLocation,
       productDiscription,
@@ -22,13 +22,24 @@ class Product {
   });
 
   Product.fromJson(Map<String, dynamic> json) {
-    productId = json['id'];
-    productImage = json['image'];
-    productName = json['name'];
-    productDiscription = json['description'];
-    productLocation = json['location'];
-    productPrice = json['price'];
-    productCreatedAt = json['createdAt'];
-    categories = json['categories'];
+    productId = json['id'].toString();
+    productImage = json['image'].toString();
+    productName = json['name'].toString();
+    productDiscription = json['description'].toString();
+    productLocation = json['location'].toString();
+    productPrice = json['price'].toString();
+    productCreatedAt = json['createdAt'].toString();
+    categories = json['categories'].toString();
   }
+
+  Map<String, dynamic> toJson() => {
+        'id': productId,
+        'image': productImage,
+        'name': productName,
+        'description': productDiscription,
+        'location': productLocation,
+        'price': productPrice,
+        'createdAt': productCreatedAt,
+        'categories': categories,
+      };
 }

@@ -1,21 +1,53 @@
+import 'dart:convert';
+
 import 'package:ecommerce_app/features/appbar/customappbar.dart';
+import 'package:ecommerce_app/features/cart/data/model/cart_model.dart';
 import 'package:ecommerce_app/features/cart/prasentation/widgets/shopping_card.dart';
 import 'package:flutter/material.dart';
 
 import '../../../../constants.dart';
+import '../../../home/data/model/product_model.dart';
+import '../../data/data_source/shared_pref.dart';
 
 class CartScreen extends StatefulWidget {
-  const CartScreen({Key? key}) : super(key: key);
+  List<Cart> cartData;
+  int count;
+  CartScreen({
+    Key? key,
+    required this.cartData,
+    required this.count,
+  }) : super(key: key);
 
   @override
   State<CartScreen> createState() => _CartScreenState();
 }
 
 class _CartScreenState extends State<CartScreen> {
-  int count = 0;
-  int price = 0;
+  var prefData = SharedPref();
+  dynamic cartDatapref;
+  getProductPref() async {
+    cartDatapref = await prefData.getCartData();
+    setState(() {
+      cartDatapref = cartDatapref;
+    });
+    print('======CartScreenData=====');
+    //print(cartDatapref);
+    return cartDatapref;
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    getProductPref();
+  }
+
   @override
   Widget build(BuildContext context) {
+    // int quntity = 0;
+    print(cartDatapref);
+    double price =
+        double.parse(widget.cartData[0].items[0].productPrice.toString());
+    double productPrice = price * widget.cartData[0].counter;
     return Scaffold(
       backgroundColor: backgroundColor,
       appBar: const PreferredSize(
@@ -45,7 +77,7 @@ class _CartScreenState extends State<CartScreen> {
                   ),
                 ),
                 Text(
-                  'Rs. ${price.toString()}',
+                  'Rs. ${productPrice.toString()}',
                   style: const TextStyle(
                     color: Colors.white,
                     fontWeight: FontWeight.bold,
@@ -65,22 +97,40 @@ class _CartScreenState extends State<CartScreen> {
               ),
             ),
           ),
-          ShoppingCard(
-            productImage:
-                'https://images.unsplash.com/photo-1505740420928-5e560c06d30e?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxzZWFyY2h8M3x8cHJvZHVjdHN8ZW58MHx8MHx8&w=1000&q=80',
-            productName: 'Games',
-            productPrice: '1200',
-            addOnTap: () {
-              setState(() {
-                count++;
-              });
-            },
-            removeOnTap: () {
-              setState(() {
-                count--;
-              });
-            },
-            productCount: count,
+          Expanded(
+            child: ListView.builder(
+              shrinkWrap: true,
+              itemCount: widget.cartData.length,
+              itemBuilder: (context, index) => ShoppingCard(
+                productImage: MemoryImage(
+                  base64Decode(
+                    //cartData['image'].toString(),R
+                    // cartDatapref['image'].toString(),
+                    widget.cartData[0].items[0].productImage.toString(),
+                  ),
+                ),
+                productName: widget.cartData[0].items[0].productName.toString(),
+                //cartDatapref['name'],
+                productPrice:
+                    widget.cartData[0].items[0].productPrice.toString(),
+                //cartDatapref['price'],
+                addOnTap: () {
+                  setState(() {
+                    // widget.cartData[index].counter++;
+                    // price.toString() * widget.count;
+                    widget.cartData[index].counter++;
+                  });
+                },
+                removeOnTap: () {
+                  setState(() {
+                    //widget.count--;
+                    widget.cartData[index].counter--;
+                  });
+                },
+                productCount: widget
+                    .cartData[0].counter, //widget.cartData[index].counter,
+              ),
+            ),
           ),
           Row(
             mainAxisAlignment: MainAxisAlignment.end,
@@ -94,12 +144,20 @@ class _CartScreenState extends State<CartScreen> {
                   borderRadius: BorderRadius.circular(20),
                 ),
                 child: Center(
-                  child: Text(
-                    'Checkout',
-                    style: TextStyle(
-                        color: Colors.white,
-                        fontSize: 17,
-                        fontWeight: FontWeight.bold),
+                  child: GestureDetector(
+                    onTap: () {
+                      setState(() {
+                        prefData.removePref('prefProductData');
+                        prefData.removePref('count');
+                      });
+                    },
+                    child: Text(
+                      'Checkout',
+                      style: TextStyle(
+                          color: Colors.white,
+                          fontSize: 17,
+                          fontWeight: FontWeight.bold),
+                    ),
                   ),
                 ),
               ),

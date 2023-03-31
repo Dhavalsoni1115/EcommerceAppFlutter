@@ -1,5 +1,11 @@
 import 'dart:convert';
 
+import 'package:ecommerce_app/features/cart/data/data_source/shared_pref.dart';
+import 'package:ecommerce_app/features/cart/data/model/cart_model.dart';
+import 'package:ecommerce_app/features/cart/prasentation/screens/cart_screen.dart';
+import 'package:ecommerce_app/features/login/data/data_source/login_shared_prefrance.dart';
+import 'package:ecommerce_app/features/register/presentation/screens/register.dart';
+import 'package:ecommerce_app/features/splashscreen/splash_screen.dart';
 import 'package:ecommerce_app/shared/widget/product_detail.dart';
 import 'package:ecommerce_app/shared/widget/productshow.dart';
 import 'package:ecommerce_app/features/home/data/model/product_model.dart';
@@ -9,6 +15,7 @@ import 'package:favorite_button/favorite_button.dart';
 import '../../../../constants.dart';
 import '../../../../shared/get_products.dart';
 import '../../../appbar/customappbar.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class ProductScreen extends StatefulWidget {
   final String selectProductId;
@@ -34,20 +41,58 @@ class _ProductScreenState extends State<ProductScreen> {
   }
 
   getData() async {
-    dynamic productData1 = await getProductCubit.getSelectedProductCubit(
+    Product productData1 = await getProductCubit.getSelectedProductCubit(
         productId: widget.selectProductId.toString());
     setState(() {
       productData = productData1;
     });
-    print(productData!);
+    //print(productData!);
   }
+
+  var token;
+  getLoginPref() async {
+    var loginpref = LoginSharedPrefrance();
+    token = await loginpref.getLoginToken();
+    print(token);
+    return token;
+  }
+
+  var prefData = SharedPref();
 
   @override
   void initState() {
     super.initState();
-    print(widget.selectProductId.toString());
+    // print(widget.selectProductId.toString());
     getData();
     getAllProductData();
+    print('data......data');
+    prefData.getCounterData(prefCountData);
+    getPrefCountData();
+    print('Token');
+    getLoginPref() ?? null;
+  }
+
+  addPrefrenceData({required List<String> cartList}) async {
+    final SharedPreferences prefs = await SharedPreferences.getInstance();
+    prefs.setStringList('cartList', cartList);
+  }
+
+  getPrefrenceData({required List<String> cartList}) async {
+    final SharedPreferences prefs = await SharedPreferences.getInstance();
+    prefs.getStringList(cartList.toString());
+  }
+
+  List<Cart> cartData = [];
+  var count = 0;
+  var prefCountData;
+  getPrefCountData() async {
+    prefCountData = await prefData.getCounterData(count);
+    setState(() {
+      prefCountData = prefCountData;
+    });
+    // print('=====productScrrenData=====');
+    // print(prefCountData);
+    return prefCountData;
   }
 
   @override
@@ -76,19 +121,35 @@ class _ProductScreenState extends State<ProductScreen> {
             SizedBox(
               width: 10,
             ),
-            Stack(
-              children: [
-                Center(
-                  child: Icon(
-                    Icons.shopping_cart,
-                    size: 40,
+            GestureDetector(
+              onTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => CartScreen(
+                      cartData: cartData,
+                      count: prefCountData,
+                    ),
                   ),
-                ),
-                CircleAvatar(
-                  radius: 12,
-                  child: Text('1'),
-                ),
-              ],
+                );
+              },
+              child: Stack(
+                children: [
+                  Center(
+                    child: Icon(
+                      Icons.shopping_cart,
+                      size: 30,
+                    ),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.only(left: 17),
+                    child: CircleAvatar(
+                      radius: 12,
+                      child: Text(prefCountData.toString()),
+                    ),
+                  ),
+                ],
+              ),
             ),
             SizedBox(
               width: 5,
@@ -169,7 +230,32 @@ class _ProductScreenState extends State<ProductScreen> {
                   ),
                   MaterialButton(
                     color: Colors.white,
-                    onPressed: () {},
+                    onPressed: () {
+                      // var token = await loginpref.getLoginToken();
+                      print(token.toString());
+                      print('checkout');
+                      setState(() {
+                        if (token == null) {
+                          setState(() {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => RegisterScreen(),
+                              ),
+                            );
+                          });
+                        } else {
+                          setState(() {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => SplashScreen(),
+                              ),
+                            );
+                          });
+                        }
+                      });
+                    },
                     elevation: 2,
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(10),
@@ -185,18 +271,74 @@ class _ProductScreenState extends State<ProductScreen> {
                   MaterialButton(
                     color: Colors.white,
                     onPressed: () {
-                      List cartData = [];
-                      cartData.add(
-                        [
-                          productData!.productId,
-                          productData!.productImage,
-                          productData!.productName,
-                          productData!.productPrice,
-                          productData!.productDiscription,
-                          productData!.productLocation,
-                          productData!.productCreatedAt,
-                        ],
-                      );
+                      setState(() {
+                        prefCountData++;
+                        prefData.storeCounterData(prefCountData);
+                        prefData.getCounterData(prefCountData);
+                        prefData.storeCartData(productData!);
+                        prefData.getCartData();
+                        // if (cartData.isEmpty) {
+                        cartData.add(
+                          Cart(items: [
+                            Product(
+                                productId: productData!.productId,
+                                productImage: productData!.productImage,
+                                productName: productData!.productName,
+                                productLocation: productData!.productLocation,
+                                productPrice: productData!.productPrice,
+                                productDiscription:
+                                    productData!.productDiscription,
+                                productCreatedAt: productData!.productCreatedAt,
+                                categories: productData!.categories),
+                          ], counter: prefCountData),
+                        );
+                        //  }
+                        // else {
+                        //   var data;
+                        //   for (int i = 0; i < cartData.length; i++) {
+                        //     for (int j = 0;
+                        //         j <= cartData[i].items.length;
+                        //         i++) {
+                        //       data = cartData[i].items[j].productId.toString();
+                        //       print('======Data1=======');
+                        //       print(cartData[i].items[j].productId.toString());
+                        //       print('=======Data2=======');
+                        //     }
+                        //   }
+                        //   data == cartData[0].items[0].productId
+                        //       ? cartData.add(
+                        //           Cart(items: [
+                        //             Product(
+                        //                 productId: productData!.productId,
+                        //                 productImage: productData!.productImage,
+                        //                 productName: productData!.productName,
+                        //                 productLocation:
+                        //                     productData!.productLocation,
+                        //                 productPrice: productData!.productPrice,
+                        //                 productDiscription:
+                        //                     productData!.productDiscription,
+                        //                 productCreatedAt:
+                        //                     productData!.productCreatedAt,
+                        //                 categories: productData!.categories),
+                        //           ], counter: prefCountData),
+                        //         )
+                        //       : null;
+                        // }
+                      });
+                      // cartData.add(
+                      //   Cart(items: [
+                      //     Product(
+                      //         productId: productData!.productId,
+                      //         productImage: productData!.productImage,
+                      //         productName: productData!.productName,
+                      //         productLocation: productData!.productLocation,
+                      //         productPrice: productData!.productPrice,
+                      //         productDiscription:
+                      //             productData!.productDiscription,
+                      //         productCreatedAt: productData!.productCreatedAt,
+                      //         categories: productData!.categories),
+                      //   ], counter: prefCountData),
+                      // );
                       print(cartData);
                     },
                     elevation: 2,

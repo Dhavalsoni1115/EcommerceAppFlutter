@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import '../../../../constants.dart';
 
 import '../../../../shared/get_products.dart';
+import '../../data/data_source/get_product_data.dart';
 import '../../data/model/product_model.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -13,11 +14,11 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-  final getProductCubit = GetProductCubit();
+  final getdata = GetProductCubit();
   List<Product> productData = [];
 
   getData() async {
-    List<Product> productData = await getProductCubit.getProductCubit();
+    List<Product> productData = await getdata.getProductCubit();
     setState(() {
       productData = productData;
     });
@@ -77,12 +78,12 @@ class _HomeScreenState extends State<HomeScreen> {
       body: SingleChildScrollView(
         child: Column(
           children: [
-            getProductCubit.showProductImageSlider(
+            getdata.showProductImageSlider(
                 containerHeight: 200, sliderHeight: 200),
-            getProductCubit.showPopulerProduct(context),
-            getProductCubit.showProductImageSlider(
+            getdata.showPopulerProduct(context),
+            getdata.showProductImageSlider(
                 containerHeight: 150, sliderHeight: 200),
-            getProductCubit.showAllProduct(context),
+            getdata.showAllProduct(context),
           ],
         ),
       ),
