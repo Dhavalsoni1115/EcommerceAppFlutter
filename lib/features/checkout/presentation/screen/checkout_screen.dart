@@ -18,6 +18,9 @@ class CheckoutScreen extends StatefulWidget {
 }
 
 String groupValue = 'Cash';
+String locationTypeValue = 'Residential';
+String residential = 'Residential';
+String business = 'Business';
 String cash = "Cash";
 String card = "Card";
 String gPay = "Gpay";
@@ -125,18 +128,28 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
                 locationType(
-                  autoFocus: true,
                   name: 'Residential',
-                  value: 'Residential',
-                  groupValue: groupValue,
-                  onChange: (value) {},
+                  value: residential,
+                  groupValue: locationTypeValue,
+                  autoFocus: false,
+                  onChange: (value) {
+                    setState(() {
+                      // print(value);
+                      locationTypeValue = value.toString();
+                    });
+                  },
                 ),
                 locationType(
-                  autoFocus: false,
                   name: 'Business',
-                  value: 'Business',
-                  groupValue: groupValue,
-                  onChange: (value) {},
+                  value: business,
+                  groupValue: locationTypeValue,
+                  autoFocus: false,
+                  onChange: (value) {
+                    setState(() {
+                      // print(value);
+                      locationTypeValue = value.toString();
+                    });
+                  },
                 ),
               ],
             ),
@@ -172,7 +185,8 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                               width: 200,
                               //color: Colors.red,
                               child: Image(
-                                image: AssetImage('assets/images/shopping.gif'),
+                                image: AssetImage(
+                                    'assets/images/truck-delivery.gif'),
                                 fit: BoxFit.cover,
                               ),
                             ),
@@ -196,6 +210,7 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                                     ),
                                     color: appBarColor,
                                     onPressed: () {
+                                      Navigator.pop(context);
                                       // Navigator.pushReplacement(
                                       //   context,
                                       //   MaterialPageRoute(
