@@ -17,13 +17,14 @@ class CheckoutScreen extends StatefulWidget {
   State<CheckoutScreen> createState() => _CheckoutScreenState();
 }
 
-String groupValue = 'Cash';
-String locationTypeValue = 'Residential';
+String locationTypeGroupValue = 'Residential';
 String residential = 'Residential';
 String business = 'Business';
+String paymentGroupValue = 'Cash';
 String cash = "Cash";
 String card = "Card";
 String gPay = "Gpay";
+String? label, streetAddress, zipCode, deliveryInstruction, feedback;
 
 class _CheckoutScreenState extends State<CheckoutScreen> {
   @override
@@ -54,36 +55,36 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                 paymentType(
                   name: 'Cash',
                   value: cash,
-                  groupValue: groupValue,
+                  groupValue: paymentGroupValue,
                   autoFocus: false,
                   onChange: (value) {
                     // print(value);
                     setState(() {
-                      groupValue = value.toString();
+                      paymentGroupValue = value.toString();
                     });
                   },
                 ),
                 paymentType(
                   name: 'Gpay',
                   value: gPay,
-                  groupValue: groupValue,
+                  groupValue: paymentGroupValue,
                   autoFocus: false,
                   onChange: (value) {
                     setState(() {
                       // print(value);
-                      groupValue = value.toString();
+                      paymentGroupValue = value.toString();
                     });
                   },
                 ),
                 paymentType(
                   name: 'Card',
                   value: card,
-                  groupValue: groupValue,
+                  groupValue: paymentGroupValue,
                   autoFocus: false,
                   onChange: (value) {
                     setState(() {
                       // print(value);
-                      groupValue = value.toString();
+                      paymentGroupValue = value.toString();
                     });
                   },
                 ),
@@ -93,7 +94,13 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
               padding: const EdgeInsets.all(10),
               child: labelText(label: 'Choose your shipping address:'),
             ),
-            addressListTile(),
+            addressListTile(
+              addressTitle: 'Home',
+              addressSubTitle: 'Sonivard',
+              onChange: (addressValue) {},
+              addressValue: 'address',
+              addressGroupValue: 'address',
+            ),
             Divider(
               thickness: 3,
               color: appBarColor,
@@ -111,11 +118,51 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                 padding: const EdgeInsets.all(10),
                 child: Column(
                   children: [
-                    textField(hintText: 'Label (E.g. Home,Work)'),
-                    textField(hintText: 'Street Address'),
-                    textField(hintText: 'ZIP Code'),
-                    textField(hintText: 'Delivery Instruction(optional)'),
-                    textField(hintText: 'Feedback'),
+                    textField(
+                      hintText: 'Label (E.g. Home,Work)',
+                      keybordType: TextInputType.text,
+                      onChenge: (labelValue) {
+                        setState(() {
+                          label = labelValue.toString();
+                        });
+                      },
+                    ),
+                    textField(
+                      hintText: 'Street Address',
+                      keybordType: TextInputType.streetAddress,
+                      onChenge: (streetAddressValue) {
+                        setState(() {
+                          streetAddress = streetAddressValue.toString();
+                        });
+                      },
+                    ),
+                    textField(
+                      hintText: 'ZIP Code',
+                      keybordType: TextInputType.number,
+                      onChenge: (zipCodeValue) {
+                        setState(() {
+                          zipCode = zipCodeValue.toString();
+                        });
+                      },
+                    ),
+                    textField(
+                      hintText: 'Delivery Instruction(optional)',
+                      keybordType: TextInputType.text,
+                      onChenge: (deliveryValue) {
+                        setState(() {
+                          deliveryInstruction = deliveryValue.toString();
+                        });
+                      },
+                    ),
+                    textField(
+                      hintText: 'Feedback',
+                      keybordType: TextInputType.text,
+                      onChenge: (feedBackValue) {
+                        setState(() {
+                          feedback = feedBackValue.toString();
+                        });
+                      },
+                    ),
                   ],
                 ),
               ),
@@ -130,24 +177,24 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                 locationType(
                   name: 'Residential',
                   value: residential,
-                  groupValue: locationTypeValue,
+                  groupValue: locationTypeGroupValue,
                   autoFocus: false,
                   onChange: (value) {
                     setState(() {
                       // print(value);
-                      locationTypeValue = value.toString();
+                      locationTypeGroupValue = value.toString();
                     });
                   },
                 ),
                 locationType(
                   name: 'Business',
                   value: business,
-                  groupValue: locationTypeValue,
+                  groupValue: locationTypeGroupValue,
                   autoFocus: false,
                   onChange: (value) {
                     setState(() {
                       // print(value);
-                      locationTypeValue = value.toString();
+                      locationTypeGroupValue = value.toString();
                     });
                   },
                 ),
@@ -174,6 +221,13 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                     ),
                     color: appBarColor,
                     onPressed: () {
+                      print(paymentGroupValue.toString());
+                      print(label!);
+                      print(streetAddress!);
+                      print(zipCode!);
+                      print(deliveryInstruction!);
+                      print(feedback!);
+                      print(locationTypeGroupValue.toString());
                       setState(() {
                         showDialog(
                           context: context,

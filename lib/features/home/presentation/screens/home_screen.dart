@@ -1,5 +1,10 @@
+import 'dart:convert';
+
 import 'package:ecommerce_app/features/appbar/customappbar.dart';
+import 'package:ecommerce_app/features/product/presentation/screens/product_screen.dart';
+import 'package:ecommerce_app/features/search/presentation/screen/search_screen.dart';
 import 'package:flutter/material.dart';
+import 'package:search_page/search_page.dart';
 import '../../../../constants.dart';
 
 import '../../../../shared/get_products.dart';
@@ -18,9 +23,9 @@ class _HomeScreenState extends State<HomeScreen> {
   List<Product> productData = [];
 
   getData() async {
-    List<Product> productData = await getdata.getProductCubit();
+    List<Product> productData1 = await getdata.getProductCubit();
     setState(() {
-      productData = productData;
+      productData = productData1;
     });
   }
 
@@ -39,13 +44,58 @@ class _HomeScreenState extends State<HomeScreen> {
         preferredSize: const Size.fromHeight(60),
         child: CustomAppBar(
           appBarTitle: Expanded(
-            child: const TextField(
-              decoration: InputDecoration(
+            child: TextField(
+              onTap: () {
+                setState(() {
+                  showSearch(
+                    context: context,
+                    delegate: SearchPage(
+                      onQueryUpdate: print,
+                      items: productData,
+                      searchLabel: 'Search product',
+                      suggestion: const Center(
+                        child: Text('Filter Product by name, categories'),
+                      ),
+                      failure: const Center(
+                        child: Text('No Product found :('),
+                      ),
+                      filter: (Product search) => [
+                        search.productName.toString(),
+                        search.categories.toString(),
+                      ],
+                      builder: (Product search) => GestureDetector(
+                        onTap: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => ProductScreen(
+                                selectProductId: search.productId.toString(),
+                              ),
+                            ),
+                          );
+                        },
+                        child: ListTile(
+                          leading: Image(
+                            image: MemoryImage(
+                              base64Decode(
+                                search.productImage.toString(),
+                              ),
+                            ),
+                          ),
+                          title: Text(search.productName.toString()),
+                          subtitle: Text(search.categories.toString()),
+                        ),
+                      ),
+                    ),
+                  );
+                });
+              },
+              decoration: const InputDecoration(
                 filled: true,
                 fillColor: Colors.white,
                 prefixIcon: Icon(Icons.search),
                 prefixIconColor: Colors.grey,
-                hintText: 'Search',
+                hintText: 'Search Product',
                 hintStyle: TextStyle(color: Colors.grey),
               ),
             ),

@@ -16,6 +16,7 @@ Widget paymentType(
       borderRadius: BorderRadius.circular(25),
     ),
     child: Row(
+      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
       children: [
         Radio(
           autofocus: autoFocus,

@@ -100,25 +100,15 @@ class _ProductScreenState extends State<ProductScreen> {
     return Scaffold(
       backgroundColor: backgroundColor,
       appBar: PreferredSize(
-        preferredSize: Size.fromHeight(60),
+        preferredSize: const Size.fromHeight(60),
         child: CustomAppBar(
-          appBarTitle: Expanded(
-            child: TextField(
-              decoration: InputDecoration(
-                  filled: true,
-                  fillColor: Colors.white,
-                  prefixIcon: Icon(Icons.search),
-                  prefixIconColor: Colors.grey,
-                  hintText: 'Search',
-                  hintStyle: TextStyle(color: Colors.grey)),
-            ),
-          ),
+          appBarTitle: const Text('Product'),
           appBarAction: [
-            Icon(
+            const Icon(
               Icons.share,
               size: 30,
             ),
-            SizedBox(
+            const SizedBox(
               width: 10,
             ),
             GestureDetector(
@@ -135,7 +125,7 @@ class _ProductScreenState extends State<ProductScreen> {
               },
               child: Stack(
                 children: [
-                  Center(
+                  const Center(
                     child: Icon(
                       Icons.shopping_cart,
                       size: 30,
@@ -151,14 +141,14 @@ class _ProductScreenState extends State<ProductScreen> {
                 ],
               ),
             ),
-            SizedBox(
+            const SizedBox(
               width: 5,
             ),
-            Icon(
+            const Icon(
               Icons.more_vert,
               size: 30,
             ),
-            SizedBox(
+            const SizedBox(
               width: 5,
             ),
           ],
@@ -210,6 +200,9 @@ class _ProductScreenState extends State<ProductScreen> {
                                   : SizedBox(),
                         ),
                       ),
+                SizedBox(
+                  height: 50,
+                ),
               ],
             ),
           ),

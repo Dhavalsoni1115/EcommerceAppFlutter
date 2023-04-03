@@ -90,16 +90,29 @@ class GetProductCubit {
         shrinkWrap: true,
         scrollDirection: Axis.horizontal,
         itemCount: productData.length,
-        itemBuilder: (context, index) => ProductDetail(
-          containerHeight: 150,
-          containerWidth: 100,
-          image: MemoryImage(
-            base64Decode(
-              productData[index].productImage.toString(),
+        itemBuilder: (context, index) => GestureDetector(
+          onTap: () {
+            selectProductId = productData[index].productId.toString();
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) => ProductScreen(
+                  selectProductId: selectProductId.toString(),
+                ),
+              ),
+            );
+          },
+          child: ProductDetail(
+            containerHeight: 150,
+            containerWidth: 100,
+            image: MemoryImage(
+              base64Decode(
+                productData[index].productImage.toString(),
+              ),
             ),
+            productName: productData[index].productName.toString(),
+            productLocation: productData[index].productLocation.toString(),
           ),
-          productName: productData[index].productName.toString(),
-          productLocation: productData[index].productLocation.toString(),
         ),
       ),
       onTap: () {

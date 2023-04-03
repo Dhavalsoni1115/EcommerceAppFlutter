@@ -4,7 +4,7 @@ import '../model/product_model.dart';
 
 getProduts() async {
   try {
-    const String url = 'http://192.168.1.15:3000/product';
+    const String url = 'http://localhost:3000/product';
     print(url);
     var response = await http.get(
       Uri.parse(url),
